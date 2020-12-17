@@ -15,69 +15,66 @@ class Calculator implements OperationInterface {
     public $numTwo;
     public $result;
 
-        public function __construct($number, $operation)
-        {
-            foreach ($number as $key => $value) {
-                if ($key = $key/2==0) {
-                    // $this->numOne = $value;
-                    echo $value;
-                } else if ($key = $key/2!=0) {
-                    // $this->numTwo = $value;
-                    echo $value;
-                }
-            }
+    public function __construct($number, $operation)
+    {
 
-            // $this->numOne = $number;
-            // $this->numTwo = $number;
+        $this->numOne = $number[0];
+        $this->numTwo = $number[1];
 
-            switch ($operation) {
-                case '+':
-                    $operation = "add";
-                    break;
-                case '-':
-                    $operation = "subtruct";
-                    break;
-                case '*':
-                    $operation = "multiple";
-                    break;
-                case '/':
-                    $operation = "divide";
-                    break;
-            }
-            $this->$operation();
+        switch ($operation) {
+            case '+':
+                $operation = "add";
+                break;
+            case '-':
+                $operation = "subtruct";
+                break;
+            case '*':
+                $operation = "multiple";
+                break;
+            case '/':
+                $operation = "divide";
+                break;
         }
 
-        public function add()
-        {
-            $this->result = $this->numOne + $this->numTwo;
-        }
+        // $count = count($number);
+        // for ($i=2; $i < $count; $i++) { 
+        //     $this->numOne = $number[$i];
+        //     $this->numTwo = $number[$i++];
+            
+        //     $this->$operation();
+        // }
 
-        public function subtruct()
-        {
-            $this->result = $this->numOne - $this->numTwo;
-        }
+        $this->$operation();
+    }
 
-        public function multiple()
-        {
-            $this->result = $this->numOne * $this->numTwo;
-        }
+    public function add()
+    {
+        $this->result = $this->numOne + $this->numTwo;
+    }
 
-        public function divide()
-        {
-            $this->result = $this->numOne / $this->numTwo;
-        }
+    public function subtruct()
+    {
+        $this->result = $this->numOne - $this->numTwo;
+    }
 
-        public function result(){
-            return $this->result;   
-        }
+    public function multiple()
+    {
+        $this->result = $this->numOne * $this->numTwo;
+    }
+
+    public function divide()
+    {
+        $this->result = $this->numOne / $this->numTwo;
+    }
+
+    public function result(){
+        return $this->result;   
+    }
 }
-
 
 class CLI {
     private $fileName;
     private $fileData;
-    private $i = 0;
-
 
     public function __construct($fileName)
     {
@@ -87,32 +84,19 @@ class CLI {
     public function getData() 
     {
         $this->fileData = fopen($this->fileName, 'r+') or die("Could not open file");
-
         (int)$data = file($this->fileName);
-                foreach ($data as $value) {
-                    $num[$this->i] = explode(' ', trim($value, "\n\r"));
-                    $this->i += 1;
-                }
-                
-                $result = [];
-                array_walk_recursive($num, function ($item, $key) use (&$result) {
-                    $result[] = $item;
-                });
-
-                // echo count($result);
-                // echo gettype($result);
-                // print_r($result);
-
-                return $result;
-
+            $i = 0;
+            foreach ($data as $value) {
+                $num[$i] = explode(' ', trim($value, "\n\r"));
+                $i++;
+            }
+            
+            $result = [];
+            array_walk_recursive($num, function ($item, $key) use (&$result) {
+                $result[] = $item;
+            });
+            return $result;
         fclose($this->fileData);
-    }
-
-    static public function convertToSimpleArray($array){
-        $result = [];
-        array_walk_recursive($arrayTest, function ($item, $key) use (&$result) {
-            $result[] = $item;    
-        });
     }
 
     static public function saveResult($number, $operation) 
@@ -137,8 +121,7 @@ class CLI {
     $cli = new CLI($fileName);
     $number = $cli->getData();
 
-    // print_r($number);
-    
+    // var_dump($number);
 
     CLI::saveResult($number, $operation);
 
