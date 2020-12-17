@@ -15,10 +15,20 @@ class Calculator implements OperationInterface {
     public $numTwo;
     public $result;
 
-        public function __construct($firstNum, $secondNum, $operation)
+        public function __construct($number, $operation)
         {
-            $this->numOne = $firstNum;
-            $this->numTwo = $secondNum;
+            foreach ($number as $key => $value) {
+                if ($key = $key/2==0) {
+                    // $this->numOne = $value;
+                    echo $value;
+                } else if ($key = $key/2!=0) {
+                    // $this->numTwo = $value;
+                    echo $value;
+                }
+            }
+
+            // $this->numOne = $number;
+            // $this->numTwo = $number;
 
             switch ($operation) {
                 case '+':
@@ -66,8 +76,7 @@ class Calculator implements OperationInterface {
 class CLI {
     private $fileName;
     private $fileData;
-    static public $numArray;
-    public $array;
+    private $i = 0;
 
 
     public function __construct($fileName)
@@ -80,36 +89,35 @@ class CLI {
         $this->fileData = fopen($this->fileName, 'r+') or die("Could not open file");
 
         (int)$data = file($this->fileName);
-                return $data;
-                // foreach ($data as $value) {
-                //     // self::$numArray = explode(' ', $value);
-                //     $num = explode(' ', $value);
-                //     $this->array += $num;
-                //     // echo $num;
-                //     print_r($this->array);
-                //     return $num;
-                // }
-                // self::$numArray = explode(' ', trim($data, "\n\r"));
-
-                // for ($i=0; $i < count($data) ; $i++) { 
-                //     # code...
-                // }
-                // echo count($data);
-                // print_r($data);
-                // echo count($num);
-                // print_r($num);
-                // print_r(self::$numArray);
+                foreach ($data as $value) {
+                    $num[$this->i] = explode(' ', trim($value, "\n\r"));
+                    $this->i += 1;
+                }
                 
-            // }
+                $result = [];
+                array_walk_recursive($num, function ($item, $key) use (&$result) {
+                    $result[] = $item;
+                });
+
+                // echo count($result);
+                // echo gettype($result);
+                // print_r($result);
+
+                return $result;
 
         fclose($this->fileData);
     }
 
+    static public function convertToSimpleArray($array){
+        $result = [];
+        array_walk_recursive($arrayTest, function ($item, $key) use (&$result) {
+            $result[] = $item;    
+        });
+    }
 
-
-    static public function saveResult($numOne, $numTwo, $operation) 
+    static public function saveResult($number, $operation) 
     {
-        $resultOne = new Calculator($numOne, $numTwo, $operation);
+        $resultOne = new Calculator($number, $operation);
         $result = $resultOne->result();
         if ($result >= 0) {
             $fd = fopen("pos_result.txt", 'a') or die("Failed to create file");
@@ -127,14 +135,12 @@ class CLI {
     $fileName = $argv[1];
     $operation = $argv[2];
     $cli = new CLI($fileName);
-    $cli->getData();
+    $number = $cli->getData();
 
-    $data = $cli->getData();
-    print_r($data);
-    $firstNum = $data[0];
-    $secondNum = $data[1];
+    // print_r($number);
+    
 
-    CLI::saveResult($firstNum, $secondNum, $operation);
+    CLI::saveResult($number, $operation);
 
 
 
