@@ -116,14 +116,15 @@ class CLI {
         }
     }
 }
-    $fileName = $argv[1];
-    $operation = $argv[2];
-    $cli = new CLI($fileName);
-    $number = $cli->getData();
 
-    // var_dump($number);
+$fileName = $argv[1];
+$operation = $argv[2];
+$cli = new CLI($fileName);
+$number = $cli->getData();
 
-    CLI::saveResult($number, $operation);
+// var_dump($number);
+
+CLI::saveResult($number, $operation);
 
 
 
